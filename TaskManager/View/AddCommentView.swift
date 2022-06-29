@@ -17,12 +17,11 @@ struct AddCommentView: View {
             Form {
                 Section(header: Text("")){
                     TextField("Enter comment", text: $comment)
-                        .foregroundColor(.black)
                     Button("Add"){
                         self.isPresented = false
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .foregroundColor(.blue)
+
                 }
             }.navigationTitle("New Comment")
         }

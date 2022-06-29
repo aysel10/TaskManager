@@ -88,8 +88,7 @@ struct TaskDetails: View {
                 AddCommentView(comment: self.$comment,isPresented: self.$isPresented)
             }
             .frame(maxWidth: .infinity, alignment: .center).padding()
-            .background(Color.black).cornerRadius(10)
-            .foregroundColor(.white)
+
             //MARK: - Date
             
             Text(task.date!.formatted(date: .long, time: .shortened))
