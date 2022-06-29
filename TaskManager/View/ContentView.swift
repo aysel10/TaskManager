@@ -19,7 +19,7 @@ struct ContentView: View {
         
         NavigationView {
             
-            //List of all tasks
+            //MARK: - List of all tasks
             List {
                 ForEach(tasks, id: \.self) { task in
                     NavigationLink(destination: TaskDetails(task: task)){
@@ -39,7 +39,8 @@ struct ContentView: View {
                         }
                         .padding(5)
                     }
-                //Swap to delete task
+                    
+                //MARK: - Swap to delete task
                 }.onDelete(perform: deleteTask)
             }
             .onAppear(perform: loadDefaultTasks)
@@ -56,25 +57,26 @@ struct ContentView: View {
                     }
                 }.sheet(isPresented: $isPresented, onDismiss: addTask){
                     AddTaskView(title: self.$title, description: self.$description,isPresented: self.$isPresented)
-                    
                 }
-                
         }
-          
     }
     
-    //Add new task
+    //MARK: - Add new task
     private func addTask(){
+        if !title.isEmpty {
         let newTask = Task(context: viewContext)
         newTask.title = title
         newTask.date = Date.now
         newTask.desciption = description
         newTask.comments = []
-
-        try? self.viewContext.save()
+        
+            try? self.viewContext.save()
+            title = ""
+            description = ""
+        }
     }
     
-    //Delete task
+    //MARK: - Delete task
     private func deleteTask(offsets: IndexSet) {
         withAnimation{
             offsets.map {tasks[$0]}.forEach(viewContext.delete)
@@ -88,7 +90,7 @@ struct ContentView: View {
         }
     }
     
-    //Function to have one default task when we start app
+    //MARK: - Function to have one default task when we start app
     private func loadDefaultTasks(){
         
         if tasks.count == 0 {
@@ -101,7 +103,6 @@ struct ContentView: View {
         task1.title = "Apply for a job"
         task1.date = Date.now
         task1.desciption = "Pass the interview"
-        
         task1.comments = [cmnt1,cmnt2]
         
         try? self.viewContext.save()

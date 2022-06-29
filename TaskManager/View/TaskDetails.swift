@@ -8,33 +8,34 @@
 import SwiftUI
 
 struct TaskDetails: View {
-    
-    @State var isPresented: Bool = false
     @Environment(\.managedObjectContext) private var viewContext
     @FetchRequest(entity: Task.entity(), sortDescriptors: []) var tasks: FetchedResults<Task>
+    
     var task: Task
+    
+    @State var isPresented: Bool = false
     @State private var newTitle = ""
     @State private var newDescription = ""
     @State private var comment = ""
+    @State private var isShown = false
 
+    //To focus on TextField when appears
     enum FocusField: Hashable {
         case field
       }
-
     @FocusState private var focusedField: FocusField?
 
-    
     var body: some View {
         
-        
         VStack {
+            //MARK: - Title text editor
+            
             TextField(task.title ?? "", text: $newTitle,onCommit:{
                 task.title = self.newTitle
                 try? self.viewContext.save()
             })
-            .focused($focusedField, equals: .field)
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {  /// Anything over 0.5 seems to work
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     self.focusedField = .field
                 }
                 self.newTitle = self.task.title != nil ? "\(self.task.title!)" : ""
@@ -43,12 +44,13 @@ struct TaskDetails: View {
                 self.task.title = self.newTitle
                 try? self.viewContext.save()
             }
-            
+            .focused($focusedField, equals: .field)
             .accentColor(.orange)
             .font(.title2.bold())
             .textFieldStyle(PlainTextFieldStyle())
             
-           
+           //MARK: - Description text editor
+            
             TextEditor(text: $newDescription)
                 .onAppear{
                     self.newDescription = self.task.desciption != nil ? "\(self.task.desciption!)" : ""
@@ -57,59 +59,67 @@ struct TaskDetails: View {
                     task.desciption = self.newDescription
                     try? self.viewContext.save()
                 }
-                
                 .accentColor(.orange)
             
             Spacer()
             
-            Text("Comments")
-                 
+            //MARK: - In review hidden field
             
-            
-            List {
-               
-                ForEach(task.commentArray, id: \.self) { comment in
-                    VStack(alignment: .leading){
-                    Text(comment.wrappedName)
-                        
-                    }
-                }.font(.caption)
-                
-                Button("Comment"){
-                    self.isPresented = true
-                }.sheet(isPresented: $isPresented, onDismiss: addComment){
-                    AddCommentView(comment: self.$comment,isPresented: self.$isPresented)
-                    
-                }
+            if isShown {
+                Text("In Review").bold()
             }
             
-            .frame( maxWidth: .infinity)
-            .edgesIgnoringSafeArea(.all)
-            .listStyle(GroupedListStyle())
-            .background(Color.white)
-                
+            //MARK: - Comments view
             
+            ForEach(task.commentArray, id: \.self) { comment in
+                VStack(alignment: .leading){
+                    Text(comment.wrappedName).font(.custom("Avenir Next Regular", size: 12))
+                    Divider()
+                }.padding(.horizontal, 8)
+                .font(.title3)
+            }
+            Spacer()
+            
+            //MARK: - Comment button
+            
+            Button("Comment"){
+                self.isPresented = true
+            }.sheet(isPresented: $isPresented, onDismiss: addComment){
+                AddCommentView(comment: self.$comment,isPresented: self.$isPresented)
+            }
+            .frame(maxWidth: .infinity, alignment: .center).padding()
+            .background(Color.black).cornerRadius(10)
+            .foregroundColor(.white)
+            //MARK: - Date
             
             Text(task.date!.formatted(date: .long, time: .shortened))
                 .font(.footnote)
-                .foregroundColor(Color.orange)
+                .foregroundColor(Color.black)
             
-        }.navigationBarTitle("", displayMode: .inline)
-            .padding()
-            .accentColor(Color.orange)
+        }
+        .toolbar {
+                Button("Send to review") {
+                    if !isShown {
+                        isShown = true
+                    }
+                }
+        }
+        .navigationBarTitle("", displayMode: .inline)
+        .padding()
+            
         
      
 }
-    
+    //Add comment function
     private func addComment(){
-        let newComment = Comment(context: viewContext)
-        newComment.name = comment
-        
-        task.addToComments(newComment)
-        
-        
-        
-        try? self.viewContext.save()
+        if !comment.isEmpty {
+            let newComment = Comment(context: viewContext)
+            newComment.name = comment
+            
+            task.addToComments(newComment)
+            
+            try? self.viewContext.save()
+        }
     }
 }
 

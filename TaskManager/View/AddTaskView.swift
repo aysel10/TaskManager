@@ -10,7 +10,6 @@ import SwiftUI
 struct AddTaskView: View {
     @Binding var title: String
     @Binding var description: String
-    
     @Binding var isPresented: Bool
     
     
@@ -20,10 +19,10 @@ struct AddTaskView: View {
                 Section(header: Text("Task Information")){
                     TextField("Enter title", text: $title)
                     TextField("Enter description", text: $description)
-                    
                     Button("Create"){
                         self.isPresented = false
                     }
+                    .frame(maxWidth: .infinity, alignment: .center)
                 }
             }.navigationTitle("New Task")
         }

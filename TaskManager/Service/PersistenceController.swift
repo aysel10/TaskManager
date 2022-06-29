@@ -10,10 +10,11 @@ import Foundation
 import CoreData
 
 class PersistenceController: ObservableObject {
+    //MARK: - Properties
     static let shared = PersistenceController()
-
     let container: NSPersistentContainer
-
+    
+    //MARK: - Initializer
     init() {
         container = NSPersistentContainer(name: "TasksContainer")
 

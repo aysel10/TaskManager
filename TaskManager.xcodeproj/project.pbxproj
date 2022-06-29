@@ -112,13 +112,12 @@
 		F9090C54286B8BEA00DF0E81 /* TaskManager */ = {
 			isa = PBXGroup;
 			children = (
+				F9090C9A286C683A00DF0E81 /* Service */,
+				F9090C99286C67C600DF0E81 /* App */,
 				F9090C92286BBD0600DF0E81 /* View */,
 				F9090C91286BBCFF00DF0E81 /* Model */,
 				F9090C90286BB98800DF0E81 /* CoreDataViewModel */,
-				F9090C55286B8BEA00DF0E81 /* TaskManagerApp.swift */,
-				F9090C59286B8BEC00DF0E81 /* Assets.xcassets */,
 				F9090C5B286B8BED00DF0E81 /* Preview Content */,
-				F9090C83286B944600DF0E81 /* TasksContainer.xcdatamodeld */,
 			);
 			path = TaskManager;
 			sourceTree = "<group>";
@@ -162,7 +161,7 @@
 		F9090C91286BBCFF00DF0E81 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				F9090C8E286BA5CF00DF0E81 /* PersistenceController.swift */,
+				F9090C83286B944600DF0E81 /* TasksContainer.xcdatamodeld */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -176,6 +175,23 @@
 				F9090C97286BE7BF00DF0E81 /* AddCommentView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		F9090C99286C67C600DF0E81 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F9090C59286B8BEC00DF0E81 /* Assets.xcassets */,
+				F9090C55286B8BEA00DF0E81 /* TaskManagerApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		F9090C9A286C683A00DF0E81 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				F9090C8E286BA5CF00DF0E81 /* PersistenceController.swift */,
+			);
+			path = Service;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
